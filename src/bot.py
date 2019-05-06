@@ -6,17 +6,19 @@ from time import sleep
 from datetime import datetime
 import telepot
 
+tokens = []
 class trader():
     
-
-    def __init__(self, lote_user):
-        self.lote = lote_user
-        self.name = "665972859:AAH1u3Wio7GEUko8R_CPAD6gy7nINHlxPJ0"
-        self.bot = telepot.Bot(name)
-        self.runtime()
+    def __init__(self, lote_user, chatId):
+        self.lote = lote_user # Define o lote de compra da sessão
+        self.name = "665972859:AAH1u3Wio7GEUko8R_CPAD6gy7nINHlxPJ0" 
+        self.bot = telepot.Bot(name) # Seleciona e inicializa o bot
+        self.runtime()  # Inicia tudo
+        self.chatId = chatId # ID para o bot enviar e receber mensagens
 
     def getOrder():
         texto = self.bot.getUpdates(['text'])
+
         if 'sell' in texto:
             return 'sell'
         else if 'buy' in texto:
