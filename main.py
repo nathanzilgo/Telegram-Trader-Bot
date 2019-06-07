@@ -1,7 +1,7 @@
 # coding:utf-8
 # bot token: 665972859:AAH1u3Wio7GEUko8R_CPAD6gy7nINHlxPJ0
 
-from lib.dwx_zeromq_connector_master.version2.python.api.DWX_ZeroMQ_Connector_v2_0_1_RC8.py import *
+from lib.dwx_zeromq_connector_master.version2.python.api.DWX_ZeroMQ_Connector_v2_0_1_RC8.py import Connector
 from MetaTrader5 import *
 from time import sleep
 from datetime import datetime
@@ -21,28 +21,28 @@ def botInit(botId = '841455460:AAETi2oNThKRxHUxvOTj5iRZZ2mlaItEd8s'):
 
 def getOrder(bot):
     texto = bot.getUpdates(['text'])
-    getToken(texto)
-    getSignal(texto)
-    getProfit(texto)
+    info = [getToken(texto),
+            getProfit(texto),
+            getSignal(texto)]
 
     if 'sell' in texto:
-        sell()
+        sell(info[0], info[1], info[2])
     elif 'buy' in texto:
-        buy()
+        buy(info[0], info[1], info[2])
 
-def buy(token = '', profit = '', signal = ''):
+def buy(token = '', profit = '', signal = '', connector):
     token = token + micro
-    Connector()._DWX_MTX_SEND_COMMAND_('OPEN', 0, token, profit, 50, 50, "Python to MT",
+    connector._DWX_MTX_SEND_COMMAND_('OPEN', 0, token, profit, 50, 50, "Python to MT",
     lote, 123456, signal)
 
-    Connector()._DWX_MTX_CLOSE_ALL_TRADES_()
+    connector._DWX_MTX_CLOSE_ALL_TRADES_()
 
-def sell(token, profit, signal):
+def sell(token, profit, signal, connector):
     token = token + micro
-    Connector()._DWX_MTX_SEND_COMMAND_('OPEN', 1, token, profit, 50, 50, "Python to MT",
+    connector._DWX_MTX_SEND_COMMAND_('OPEN', 1, token, profit, 50, 50, "Python to MT",
     lote, 123456, signal)
 
-    Connector()._DWX_MTX_CLOSE_ALL_TRADES_()
+    connector._DWX_MTX_CLOSE_ALL_TRADES_()
 
 def getSignal(text):
     first_line = text.split("/n")[1]
