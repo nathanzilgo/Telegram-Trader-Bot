@@ -1,7 +1,7 @@
 # coding:utf-8
 # bot token: 665972859:AAH1u3Wio7GEUko8R_CPAD6gy7nINHlxPJ0
 
-from lib.dwx_zeromq_connector_master.version2.python.api.DWX_ZeroMQ_Connector_v2_0_1_RC8.py import Connector
+from lib.dwx_zeromq_connector_master.version2.python.api.DWX_ZeroMQ_Connector_v2_0_1_RC8.py import *
 from MetaTrader5 import *
 from time import sleep
 from datetime import datetime
@@ -21,6 +21,9 @@ def botInit(botId = '841455460:AAETi2oNThKRxHUxvOTj5iRZZ2mlaItEd8s'):
 
 def getOrder(bot):
     texto = bot.getUpdates(['text'])
+    getToken(texto)
+    getSignal(texto)
+    getProfit(texto)
 
     if 'sell' in texto:
         sell()
@@ -28,9 +31,18 @@ def getOrder(bot):
         buy()
 
 def buy(token = '', profit = '', signal = ''):
-    
+    token = token + micro
+    Connector()._DWX_MTX_SEND_COMMAND_('OPEN', 0, token, profit, 50, 50, "Python to MT",
+    lote, 123456, signal)
+
+    Connector()._DWX_MTX_CLOSE_ALL_TRADES_()
+
 def sell(token, profit, signal):
-    #TODO
+    token = token + micro
+    Connector()._DWX_MTX_SEND_COMMAND_('OPEN', 1, token, profit, 50, 50, "Python to MT",
+    lote, 123456, signal)
+
+    Connector()._DWX_MTX_CLOSE_ALL_TRADES_()
 
 def getSignal(text):
     first_line = text.split("/n")[1]
@@ -68,8 +80,11 @@ print(greetings)
 
 lote = int(input("Forneça o lote a ser comprado: "))
 micro = input("Conta MICRO ou não? (S/N) ")
+user = input("Informe o id de usuário: ")
 
-if micro.upper() == 'N': micro = False
-else: micro = True
+if micro.upper() == 'N': micro = ''
+else: micro = 'Micro'
+
+connector = Connector(user)
 
 runtime(lote, micro)
