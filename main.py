@@ -26,13 +26,13 @@ def getOrder(bot):
             getSignal(texto)]
 
     if 'sell' in texto:
-        sell(info[0], info[1], info[2])
+        sell(info[0], info[1], info[2], connector)
     elif 'buy' in texto:
-        buy(info[0], info[1], info[2])
+        buy(info[0], info[1], info[2], connector)
 
-def buy(token = '', profit = '', signal = '', connector):
+def buy(token, profit, signal, connector):
     token = token + micro
-    connector._DWX_MTX_SEND_COMMAND_('OPEN', 0, token, profit, 50, 50, "Python to MT",
+    connector._DWX_MTX_SEND_COMMAND_('OPEN', 0, token, actual_price, 0, profit, "Python to MT",
     lote, 123456, signal)
 
     connector._DWX_MTX_CLOSE_ALL_TRADES_()
